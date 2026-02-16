@@ -1,0 +1,13 @@
+package autorize.model;
+
+public enum EnforcementRuleType {
+  STATUS_EQUALS,
+  HEADERS_CONTAINS,
+  HEADERS_REGEX,
+  BODY_CONTAINS,
+  BODY_REGEX,
+  FULL_CONTAINS,
+  FULL_REGEX,
+  FULL_LENGTH_EQUALS
+}
+

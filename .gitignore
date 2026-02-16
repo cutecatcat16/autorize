@@ -1,1 +1,12 @@
 *.class
+
+# Java/Gradle rewrite
+new/.gradle/
+new/build/
+new/out/
+new/*.iml
+new/lib/*.jar
+
+# Common IDE/build noise
+.DS_Store
+Thumbs.db

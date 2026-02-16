@@ -1,0 +1,13 @@
+package autorize.model;
+
+public enum MatchReplaceType {
+  HEADER_REPLACE,
+  COOKIE_REPLACE,
+  STEPPER_HEADER,
+  HEADERS_SIMPLE,
+  HEADERS_REGEX,
+  BODY_SIMPLE,
+  BODY_REGEX,
+  PATH_SIMPLE,
+  PATH_REGEX
+}

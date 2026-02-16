@@ -1,0 +1,68 @@
+plugins {
+  id 'java'
+}
+
+group = 'local.autorize'
+version = '0.1.0'
+
+java {
+  // Compile with any JDK >= 17 (you currently have JDK 21 installed),
+  // but emit Java 17 bytecode for Burp.
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+  mavenCentral()
+}
+
+// Montoya API is published to Maven Central.
+dependencies {
+  compileOnly "net.portswigger.burp.extensions:montoya-api:2026.2"
+
+  // Put your bundled libraries here, e.g.:
+  // implementation "com.squareup.okhttp3:okhttp:4.12.0"
+  implementation "com.fasterxml.jackson.core:jackson-databind:2.17.2"
+}
+
+tasks.jar {
+  archiveBaseName = 'autorize'
+  manifest {
+    attributes(
+      'Implementation-Title': 'Autorize (Java rewrite)',
+      'Implementation-Version': project.version
+    )
+  }
+}
+
+tasks.register('fatJar', Jar) {
+  group = 'build'
+  description = 'Build a single JAR containing this extension and its runtime dependencies.'
+
+  archiveBaseName = 'autorize'
+  archiveClassifier = 'all'
+
+  // Keep behavior similar to jar task.
+  manifest {
+    attributes(
+      'Implementation-Title': 'Autorize (Java rewrite)',
+      'Implementation-Version': project.version
+    )
+  }
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from sourceSets.main.output
+  dependsOn configurations.runtimeClasspath
+  from {
+    configurations.runtimeClasspath.findAll { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
+tasks.assemble {
+  dependsOn tasks.named('fatJar')
+}
+
+tasks.withType(JavaCompile).configureEach {
+  options.release = 17
+}
